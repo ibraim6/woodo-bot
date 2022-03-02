@@ -9,6 +9,7 @@ import glob from "glob";
 import { promisify } from "util";
 import { RegisterCommandsOptions } from "../typings/client";
 import { Event } from "./Event";
+import mongoose from 'mongoose';
 
 const globPromise = promisify(glob);
 
@@ -22,6 +23,8 @@ export class ExtendedClient extends Client {
     start() {
         this.registerModules();
         this.login(process.env.botToken);
+        const mongoUri = process.env.mongoUri
+        mongoose.connect(`${mongoUri}`).then(()=> console.log("Connected To MongoDB"))
     }
     async importFile(filePath: string) {
         return (await import(filePath))?.default;
@@ -54,7 +57,7 @@ export class ExtendedClient extends Client {
         this.on("ready", () => {
             this.registerCommands({
                 commands: slashCommands,
-                guildId: process.env.guildId
+                guildId: process.env.guildId,
             });
         });
 
