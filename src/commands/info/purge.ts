@@ -15,21 +15,13 @@ export default new Command({
     },
   ],
   run: async ({ interaction }) => {
-    // Define Variables
     const amount = interaction.options.getInteger('amount');
-    const messages = await interaction.channel.messages.fetch({
-      limit: amount + 1,
-    }).catch()
-    const filtered = messages.filter(
-      (message) => Date.now() - message.createdTimestamp < ms('30 days')
-    );
-    // Functions
     interface ergs {
       title: string;
       descr?: string;
       hide?: boolean;
     }
-    const errFunct = ({title, descr, hide}: ergs) => {
+    const errFunct = ({ title, descr, hide }: ergs) => {
       const embed = new MessageEmbed()
         .setTitle(`Error - ${title}`)
         .setDescription(`${descr}`)
@@ -40,25 +32,36 @@ export default new Command({
         });
       interaction.followUp({ embeds: [embed], ephemeral: hide ? hide : false });
     };
-    // If Commands
-    if (amount > 100)
-      return errFunct({title: "Maximum Amount Reached", descr: 'Maximum Amount Have Been Reached, Please Lower Your Counts', hide: false});
-    if (
-      interaction.channel?.type === undefined ||
-      interaction.channel?.type === 'DM'
-    )
-      return errFunct({
-        title: 'Unknown Method',
-        descr: 'Command Cannot be used in direct messages',
-        hide: false
+    if (amount >= 100) {
+      errFunct({
+        title: 'Maximum Amount Reached',
+        descr: 'Maximum Amount Have Been Reached, Please Lower Your Counts',
+        hide: false,
       });
-    // Executing Commands
-    await interaction.channel.bulkDelete(filtered).then(() => {
-      interaction.channel
-        .send({ content: `*Deleted **${filtered.size - 1}** Messages*` })
-        .then((msg) => {
-          setTimeout(() => msg.delete(), ms('3 seconds'));
+    } else {
+      const messages = await interaction.channel.messages.fetch({
+        limit: amount + 1,
+      });
+      const filtered = messages.filter(
+        (message) => Date.now() - message.createdTimestamp < ms('30 days')
+      );
+
+      if (
+        interaction.channel?.type === undefined ||
+        interaction.channel?.type === 'DM'
+      )
+        return errFunct({
+          title: 'Unknown Method',
+          descr: 'Command Cannot be used in direct messages',
+          hide: false,
         });
-    });
+      await interaction.channel.bulkDelete(filtered).then(() => {
+        interaction.channel
+          .send({ content: `*Deleted **${filtered.size - 1}** Messages*` })
+          .then((msg) => {
+            setTimeout(() => msg.delete(), ms('3 seconds'));
+          });
+      });
+    }
   },
 });

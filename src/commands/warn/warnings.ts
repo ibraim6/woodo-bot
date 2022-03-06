@@ -1,6 +1,6 @@
 import { Client, CommandInteraction, MessageEmbed } from 'discord.js';
-import WarnSchema from '../../Schemas/Warn';
-import { Command } from './../../structures/Command';
+import WarnSchema from '../../Schemas/WarnSchema';
+import { Command } from '../../structures/Command';
 export default new Command({
   name: 'warnings',
   description: 'Display Warnings',
