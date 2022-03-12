@@ -15,6 +15,7 @@
     "description": "",
     "dependencies": {
         "@types/ms": "^0.7.31",
+        "axios": "^0.26.1",
         "canvacord": "^5.2.3",
         "discord-xp": "^1.1.16",
         "discord.js": "^13.5.0",
