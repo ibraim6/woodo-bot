@@ -1,1 +1,1 @@
-worker: yarn build && yarn prod 
+worker: npm run prod 
