@@ -3,13 +3,13 @@ import { Command } from '../../structures/Command';
 import ms from 'ms';
 
 export default new Command({
-  name: 'purge',
-  description: 'Delete messages with just a command',
+  name: 'clear',
+  description: 'Clear Messages',
   userPermissions: ['MANAGE_MESSAGES'],
   options: [
     {
       name: 'amount',
-      description: 'The amount of messages needs to be deleted',
+      description: 'The amount of messages needs to be cleared',
       type: 'INTEGER',
       required: true,
     },
@@ -57,7 +57,7 @@ export default new Command({
         });
       await interaction.channel.bulkDelete(filtered).then(() => {
         interaction.channel
-          .send({ content: `*Deleted **${filtered.size - 1}** Messages*` })
+          .send({ content: `*Cleared **${filtered.size - 1}** Messages*` })
           .then((msg) => {
             setTimeout(() => msg.delete(), ms('3 seconds'));
           });
