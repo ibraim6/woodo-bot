@@ -61,7 +61,8 @@ export default new Command({
           .then((msg) => {
             setTimeout(() => msg.delete(), ms('3 seconds'));
           });
-      });
+      }).catch(()=> {
+        errFunct({title: 'Not Enough Permissions', descr: 'Please Give Manage Messages Permission To The Bot To Clear Messages', hide: true})});
     }
   },
 });
