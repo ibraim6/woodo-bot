@@ -12,7 +12,7 @@ export default new Command({
       type: 'SUB_COMMAND',
       options: [
         {
-          name: 'channel',
+          name: 'in',
           description: 'enter a channel',
           type: 'CHANNEL',
           required: true,
@@ -37,7 +37,7 @@ export default new Command({
       type: 'SUB_COMMAND',
       options: [
         {
-          name: 'channel',
+          name: 'in',
           description: 'The Channel Which You Want to send a message',
           type: 'CHANNEL',
           required: true,
@@ -52,7 +52,7 @@ export default new Command({
     },
   ],
   run: async ({ interaction }) => {
-    const channel = interaction.options.getChannel('channel');
+    const channel = interaction.options.getChannel('in');
     const subcmd = interaction.options.getSubcommand();
     if (subcmd === 'message') {
       const message = interaction.options.getString('message');
@@ -75,7 +75,7 @@ export default new Command({
       const title = interaction.options.getString('title');
       const description = interaction.options.getString('description');
       const embed = new MessageEmbed()
-        .setTitle(`${title}`)
+        .setTitle(`${title}`).setFooter({text: `Requested by ${interaction.member.user.tag}`})
         .setColor('#00acff')
         .setDescription(`${description}`);
       const channelID = interaction.client.channels.cache.get(
